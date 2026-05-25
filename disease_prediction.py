@@ -1,11 +1,7 @@
-"""
-CodeAlpha Internship - Task 4: Disease Prediction from Medical Data
-===================================================================
-Objective: Predict the possibility of heart disease based on patient data.
-Approach: SVM, Logistic Regression, Random Forest, XGBoost, KNN
-Dataset: Heart Disease Dataset (UCI ML Repository)
-Author: Samah AZIZ
-"""
+# Disease Prediction from Medical Data - CodeAlpha ML Internship
+# Heart disease prediction using classification algorithms
+# Dataset: UCI Heart Disease (Cleveland)
+# Author: Samah AZIZ
 
 import numpy as np
 import pandas as pd
@@ -29,12 +25,8 @@ print("TASK 4: DISEASE PREDICTION FROM MEDICAL DATA")
 print("Heart Disease Prediction")
 print("=" * 60)
 
-# ============================================================
-# 1. LOAD DATASET
-# ============================================================
-print("\n" + "=" * 60)
-print("1. LOADING HEART DISEASE DATASET")
-print("=" * 60)
+# --- Loading dataset ---
+print("\n--- Loading Heart Disease Dataset ---")
 
 # Load UCI Heart Disease dataset from URL
 url = "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data"
@@ -88,17 +80,13 @@ data = data.dropna()
 # Convert target: 0 = no disease, 1 = disease (original has 0-4)
 data['target'] = (data['target'] > 0).astype(int)
 
-print(f"\n[DATA] Dataset shape: {data.shape}")
-print(f"[DATA] Class distribution:\n{data['target'].value_counts()}")
-print(f"\n[DATA] Dataset info:")
+print(f"\nDataset shape: {data.shape}")
+print(f"Class distribution:\n{data['target'].value_counts()}")
+print(f"\nDataset info:")
 print(data.describe().round(2))
 
-# ============================================================
-# 2. EXPLORATORY DATA ANALYSIS
-# ============================================================
-print("\n" + "=" * 60)
-print("2. EXPLORATORY DATA ANALYSIS")
-print("=" * 60)
+# --- EDA ---
+print("\n--- Exploratory Data Analysis ---")
 
 # Correlation heatmap
 fig, axes = plt.subplots(1, 2, figsize=(16, 6))
@@ -154,12 +142,8 @@ plt.savefig('age_vs_heartrate.png', dpi=150, bbox_inches='tight')
 plt.show()
 print("[OK] Scatter plot saved to 'age_vs_heartrate.png'")
 
-# ============================================================
-# 3. DATA PREPROCESSING
-# ============================================================
-print("\n" + "=" * 60)
-print("3. DATA PREPROCESSING")
-print("=" * 60)
+# --- Preprocessing ---
+print("\n--- Preprocessing ---")
 
 X = data.drop('target', axis=1)
 y = data['target']
@@ -180,12 +164,8 @@ print(f"[OK] Train set: {X_train_scaled.shape[0]} samples")
 print(f"[OK] Test set:  {X_test_scaled.shape[0]} samples")
 print(f"[OK] Features:  {X_train_scaled.shape[1]}")
 
-# ============================================================
-# 4. MODEL TRAINING & EVALUATION
-# ============================================================
-print("\n" + "=" * 60)
-print("4. MODEL TRAINING & EVALUATION")
-print("=" * 60)
+# --- Training models ---
+print("\n--- Training & Evaluation ---")
 
 models = {
     'Logistic Regression': LogisticRegression(max_iter=1000, random_state=42),
@@ -225,12 +205,8 @@ for name, model in models.items():
     print(f"  ROC-AUC:   {auc:.4f}")
     print(f"  CV Accuracy: {cv_scores.mean():.4f} (+/- {cv_scores.std():.4f})")
 
-# ============================================================
-# 5. MODEL COMPARISON
-# ============================================================
-print("\n" + "=" * 60)
-print("5. MODEL COMPARISON")
-print("=" * 60)
+# --- Comparison ---
+print("\n--- Model Comparison ---")
 
 comparison_df = pd.DataFrame({
     name: {k: v for k, v in vals.items() if k not in ['y_pred', 'y_proba']}
@@ -240,15 +216,11 @@ comparison_df = pd.DataFrame({
 print(comparison_df.to_string())
 
 best_model_name = comparison_df['ROC-AUC'].idxmax()
-print(f"\n[BEST] Best Model: {best_model_name} "
+print(f"\nBest Model: {best_model_name} "
       f"(ROC-AUC: {comparison_df.loc[best_model_name, 'ROC-AUC']:.4f})")
 
-# ============================================================
-# 6. VISUALIZATIONS
-# ============================================================
-print("\n" + "=" * 60)
-print("6. GENERATING VISUALIZATIONS")
-print("=" * 60)
+# --- Plots ---
+print("\n--- Generating plots ---")
 
 # --- ROC Curves ---
 fig, axes = plt.subplots(1, 2, figsize=(16, 6))
@@ -320,20 +292,12 @@ plt.savefig('feature_importance.png', dpi=150, bbox_inches='tight')
 plt.show()
 print("[OK] Feature importance saved to 'feature_importance.png'")
 
-# ============================================================
-# 7. CLASSIFICATION REPORT (Best Model)
-# ============================================================
-print("\n" + "=" * 60)
-print(f"7. DETAILED CLASSIFICATION REPORT - {best_model_name}")
-print("=" * 60)
+# --- Final report ---
+print(f"\n--- Classification Report ({best_model_name}) ---")
 print(classification_report(y_test, y_pred_best, target_names=['Healthy', 'Heart Disease']))
 
-# ============================================================
-# 8. MEDICAL INTERPRETATION
-# ============================================================
-print("\n" + "=" * 60)
-print("8. MEDICAL FEATURE INTERPRETATION")
-print("=" * 60)
+# --- Feature interpretation ---
+print("\n--- Medical Feature Interpretation ---")
 
 feature_descriptions = {
     'age': 'Patient age (years)',
@@ -356,6 +320,4 @@ for i, (feat, imp) in enumerate(feature_imp.iloc[-5:].items()):
     desc = feature_descriptions.get(feat, feat)
     print(f"  {5-i}. {feat} ({imp:.4f}) - {desc}")
 
-print("\n" + "=" * 60)
-print("[OK] TASK 4 COMPLETED SUCCESSFULLY!")
-print("=" * 60)
+print("\nDone!")
